@@ -17,7 +17,7 @@ public class FruitResourceTest {
     @Test
     public void testJsonMergePatch() {
         Response response = given().get();
-        Fruit loadedFruit = (Fruit) response.body().jsonPath().getList("", Fruit.class).get(0); // Only a single
+        Fruit loadedFruit = response.body().jsonPath().getList("", Fruit.class).get(0); // Only a single
         // fruit available
         Assertions.assertEquals(loadedFruit.name, "apple");
         // Do first way of patching via JSON Merge Patch
@@ -25,14 +25,14 @@ public class FruitResourceTest {
         response = given().pathParam("id", loadedFruit.id).contentType("application/merge-patch+json")
                 .body(patch)
                 .patch("/{id}");
-        Fruit patchedFruit = (Fruit) response.body().as(Fruit.class);
+        Fruit patchedFruit = response.body().as(Fruit.class);
         Assertions.assertEquals(loadedFruit.name, "banana"); // ! Fails !
     }
 
     @Test
     public void testJsonPatch() {
         Response response = given().get();
-        Fruit loadedFruit = (Fruit) response.body().jsonPath().getList("", Fruit.class).get(0); // Only a single
+        Fruit loadedFruit = response.body().jsonPath().getList("", Fruit.class).get(0); // Only a single
         // fruit available
         Assertions.assertEquals(loadedFruit.name, "apple");
         // Try patching via JSON Patch
@@ -40,7 +40,7 @@ public class FruitResourceTest {
         response = given().pathParam("id", loadedFruit.id).contentType(MediaType.APPLICATION_JSON_PATCH_JSON)
                 .body(patch)
                 .patch("/{id}");
-        Fruit patchedFruit = (Fruit) response.body().as(Fruit.class);
+        Fruit patchedFruit = response.body().as(Fruit.class);
         Assertions.assertEquals(loadedFruit.name, "banana"); // ! Fails !
     }
 
